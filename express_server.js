@@ -9,7 +9,7 @@ function generateRandomString() {
    return r;
 }
 
-app.set("view engine", "ejs");
+app.set("view engine", "ejs"); // Set ejs as the view engine
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -20,10 +20,12 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
+// add additional endpoints
 app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+// response can contain HTML code, which would be rendered in the client browser
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
@@ -35,7 +37,7 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = req.body.longURL;
-  res.redirect(`/urls/${shortURL}`);         // Respond with 'Ok' (we will replace this)
+  res.redirect(`/urls/${shortURL}`);
 });
 
 app.get("/urls", (req, res) => {
