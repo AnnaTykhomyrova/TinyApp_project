@@ -15,7 +15,9 @@
   <a href=#>Create New TinyURL</a>
   <ul>
       <% Object.keys(urls).forEach(function(url) { %>
-          <li><strong><%= url %></strong>: <%= urls[url] %></li>
+          <li><strong><%= url %></strong>: <%= urls[url] %>
+          </li>
+          <form method="POST" action="/urls/9sm5xK/delete"><button type="submit">Delete</button></form>
       <% }); %>
   </ul>
 </body>
