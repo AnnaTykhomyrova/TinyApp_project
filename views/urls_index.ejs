@@ -9,16 +9,17 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-  <header>
-    <% include ./partials/_header %>
-  </header>
-  <a href=#>Create New TinyURL</a>
-  <ul>
-      <% Object.keys(urls).forEach(function(url) { %>
-          <li><strong><%= url %></strong>: <%= urls[url] %>
-          </li>
-          <form method="POST" action="/urls/9sm5xK/delete"><button type="submit">Delete</button></form>
+  <% Object.keys(urls).forEach(function(url) { %>
+      <form class="form-inline" method="POST" action="/urls/<%= url %>/delete">
+          <div class="form-group mb-2">
+            <label for="longURL"> <strong><%= url %></strong>&nbsp;&nbsp;&#8594;&nbsp;&nbsp;<a href='<%= urls[url] %>' target="_blank"><%= urls[url] %></a>
+              &nbsp;&nbsp;<a href="urls/<%= url %>">Edit</a>
+            </label>&nbsp;&nbsp;
+            <button type="submit">Delete</button>
+        </div>
+        </form>
       <% }); %>
-  </ul>
+
 </body>
 </html>
+
