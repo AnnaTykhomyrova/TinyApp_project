@@ -16,7 +16,7 @@
     <form class="form-inline" method="POST" action="/urls/<%= url %>/delete">
         <div class="form-group mb-2">
           <label for="longURL"> <strong><%= url %></strong>&nbsp;&nbsp;&#8594;&nbsp;&nbsp;<a href='<%= urls[url] %>' target="_blank"><%= urls[url] %></a>
-            &nbsp;&nbsp;<a href="urls/<%= url %>">Edit</a>
+            &nbsp;&nbsp;<a href="/urls/<%= url %>">Edit</a>
           </label>&nbsp;&nbsp;
           <button type="submit">Delete</button>
         </div>
