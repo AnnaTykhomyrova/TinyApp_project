@@ -1,7 +1,13 @@
 var express = require("express");
 var app = express();
-var PORT = 8080; // default port 8080
+// default port 8080
+var PORT = 8080;
 const bodyParser = require("body-parser");
+// Set cookies
+var cookieParser = require('cookie-parser');
+var app = express();
+app.use(cookieParser());
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 function generateRandomString() {
@@ -9,7 +15,8 @@ function generateRandomString() {
    return r;
 }
 
-app.set("view engine", "ejs"); // Set ejs as the view engine
+// Set ejs as the view engine
+app.set("view engine", "ejs");
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -25,13 +32,27 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
+app.post("/login", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls/");
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("username", req.body.username);
+  res.redirect("/urls/");
+});
+
 // response can contain HTML code, which would be rendered in the client browser
 app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+  username: req.cookies.username,
+  urls: urlDatabase
+};
+res.render("urls_new", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -41,8 +62,11 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
+  let templateVars = {
+  username: req.cookies.username,
+  urls: urlDatabase
+};
+res.render("urls_index", templateVars);
 });
 
 app.get("/urls/:shortURL", (req, res) => {

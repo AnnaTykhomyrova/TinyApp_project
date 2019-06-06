@@ -7,18 +7,21 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>TinyApp</title>
+  <% include partials/_header %>
 </head>
 <body style="font-size:20px; padding:50px;">
+  <h3><a href="/urls/new">Create TinyURL</a></h3>
+
   <% Object.keys(urls).forEach(function(url) { %>
-      <form class="form-inline" method="POST" action="/urls/<%= url %>/delete">
-          <div class="form-group mb-2">
-            <label for="longURL"> <strong><%= url %></strong>&nbsp;&nbsp;&#8594;&nbsp;&nbsp;<a href='<%= urls[url] %>' target="_blank"><%= urls[url] %></a>
-              &nbsp;&nbsp;<a href="urls/<%= url %>">Edit</a>
-            </label>&nbsp;&nbsp;
-            <button type="submit">Delete</button>
+    <form class="form-inline" method="POST" action="/urls/<%= url %>/delete">
+        <div class="form-group mb-2">
+          <label for="longURL"> <strong><%= url %></strong>&nbsp;&nbsp;&#8594;&nbsp;&nbsp;<a href='<%= urls[url] %>' target="_blank"><%= urls[url] %></a>
+            &nbsp;&nbsp;<a href="urls/<%= url %>">Edit</a>
+          </label>&nbsp;&nbsp;
+          <button type="submit">Delete</button>
         </div>
-        </form>
-      <% }); %>
+    </form>
+  <% }); %>
 
 </body>
 </html>
