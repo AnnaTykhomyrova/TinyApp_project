@@ -7,20 +7,20 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <title>TinyApp</title>
+  <% include partials/_header %>
 </head>
 <body style="font-size:20px; padding:50px;">
-  <form method="POST" action="/register" action="/register">
+  <h3>Login</h3>
+  <form method="POST" action="/login">
   <p>
-    <label>Email</label>
-    <input type="email" name="email" />
+    <label>Email:</label>
+    <input type="email" name="email"/>
   </p>
   <p>
-    <label>Password</label>
-    <input type="password" name="password" />
+    <label>Password:</label>
+    <input type="password" name="password"/>
   </p>
-  <p>
-    <input type="submit" name="Register" value="Register"/>
-  </p>
+    <button type="submit" class="btn btn-primary">Login</button>
   </form>
 </body>
 </html>

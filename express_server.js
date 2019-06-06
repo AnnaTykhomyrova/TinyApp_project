@@ -26,8 +26,8 @@ var urlDatabase = {
 const users = {
   "userRandomID": {
     id: "userRandomID",
-    email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    email: "tykhomyrovaanna@gmail.com",
+    password: "123"
   },
  "user2RandomID": {
     id: "user2RandomID",
@@ -45,13 +45,17 @@ app.get("/urls.json", (req, res) => {
   res.json(urlDatabase);
 });
 
-app.post("/login", (req, res) => {
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
+app.get("/login", (req, res) => {
+  let templateVars = {
+  user: users[req.cookies.user_id],
+  urls: urlDatabase
+};
+res.render("login_form", templateVars);
 });
 
+
 app.post("/logout", (req, res) => {
-  res.clearCookie("username", req.body.username);
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 
@@ -62,7 +66,7 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-  username: req.cookies.username,
+  user: users[req.cookies.user_id],
   urls: urlDatabase
 };
 res.render("urls_new", templateVars);
@@ -76,23 +80,37 @@ app.post("/urls", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = {
-  username: req.cookies.username,
+  user: users[req.cookies.user_id],
   urls: urlDatabase
 };
 res.render("urls_index", templateVars);
 });
 
 app.get("/register", (req, res) => {
-  let templateVars = {
-  email: req.cookies.email,
+let templateVars = {
+  user: users[req.cookies.user_id],
   urls: urlDatabase
 };
-res.render("registration_form");
+res.render("registration_form", templateVars);
 });
+
+function emailAlreadyInUse(email) {
+  let exists = false;
+  for(let user in users) {
+    if(users[user].email === email) exists = users[user];
+  }
+  return exists;
+}
 
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  if (email === "" || password == "") {
+   res.status(400).send('Fields cannot be empty!');
+  } else if (emailAlreadyInUse(email)) {
+    res.status(400).send('Email has already exist!');
+  }
+
   const id = generateRandomString();
   users[id] = {
     id: id,
@@ -103,11 +121,28 @@ app.post("/register", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  const user = emailAlreadyInUse(email);
+  if (!user) {
+    res.status(403).send('Email cannot be found!');
+  } else {
+      if (user.password === password) {
+        res.cookie('user_id', user.id);
+        res.redirect('/urls');
+      } else {
+        res.status(403).send('Password doesnt exist!');
+      }
+    }
+  });
+
+
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
     shortURL: req.params.shortURL,
     longURL: urlDatabase[req.params.shortURL],
-    username: req.cookies.username
+    user: users[req.cookies.user_id]
  };
   res.render("urls_show", templateVars);
 });
