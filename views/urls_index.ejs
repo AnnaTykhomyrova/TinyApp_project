@@ -10,25 +10,31 @@
   <% include partials/_header %>
 </head>
 <body style="font-size:20px; padding:50px;">
-  <h3>Create TinyURL</h3>
-    <form class="form-inline" action="/urls" method="POST">
+
+<%if (user) { %>
+
+  <form class="form-inline" action="/urls" method="POST">
       <div class="form-group mb-2">
         <label for="longURL">Enter a URL:</label>
         <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
     </form>
+    <% } %>
+
 
   <% Object.keys(urls).forEach(function(url) { %>
     <form class="form-inline" method="POST" action="/urls/<%= url %>/delete">
         <div class="form-group mb-2">
-          <label for="longURL"> <strong><%= url %></strong>&nbsp;&nbsp;&#8594;&nbsp;&nbsp;<a href='<%= urls[url] %>' target="_blank"><%= urls[url] %></a>
+          <label for="longURL"> <strong><%= url %></strong>&nbsp;&nbsp;&#8594;&nbsp;&nbsp;<a href='<%= urls[url].longURL %>' target="_blank"><%= urls[url].longURL %></a>
             &nbsp;&nbsp;<a href="/urls/<%= url %>">Edit</a>
           </label>&nbsp;&nbsp;
           <button type="submit">Delete</button>
         </div>
     </form>
   <% }); %>
+
+
 
 </body>
 </html>
