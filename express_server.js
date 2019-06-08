@@ -34,7 +34,13 @@ const users = {};
 
 // GET functions
 app.get("/", (req, res) => {
-  res.send("Hello!");
+  let currentUser = req.session.user_id;
+  if (currentUser) {
+    var userURL = urlsForUser(currentUser);
+    res.redirect("/urls");
+  } else {
+  res.redirect("/login");
+  }
 });
 
 
@@ -74,7 +80,7 @@ app.get("/urls", (req, res) => {
     };
   res.render("urls_index", templateVars);
 } else {
-  res.redirect("/login");
+  res.send('You have to register/login first');
 }
 });
 

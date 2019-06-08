@@ -5,7 +5,7 @@ TinyApp is a full stack web application built with Node and Express that allows 
 
 
 # Final Product
-!["Screenshot of the first page. The website redirects user to login page if user is not logged in or unregistered."](https://github.com/AnnaTykhomyrova/TinyApp_project/blob/master/docs/urls-page.png)
+!["Screenshot of urls page. If user is not logged in returns HTML with a relevant error message."](https://github.com/AnnaTykhomyrova/TinyApp_project/blob/master/docs/urls-page.png)
 !["Screenshot of register page."](https://github.com/AnnaTykhomyrova/TinyApp_project/blob/master/docs/register-page.png)
 !["Screenshot of logged in user."](https://github.com/AnnaTykhomyrova/TinyApp_project/blob/master/docs/logged-user-page.png)
 !["Screenshot of user URLs."](https://github.com/AnnaTykhomyrova/TinyApp_project/blob/master/docs/users-urls-page.png)
