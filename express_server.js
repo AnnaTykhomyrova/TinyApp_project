@@ -74,7 +74,7 @@ app.get("/urls", (req, res) => {
     };
   res.render("urls_index", templateVars);
 } else {
-  res.send('You have to login first');
+  res.redirect("/login");
 }
 });
 
