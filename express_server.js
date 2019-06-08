@@ -9,6 +9,8 @@ var app = express();
 app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({extended: true}));
+// Use bcrypt When Storing Passwords
+const bcrypt = require('bcrypt');
 
 function generateRandomString() {
   let r = Math.random().toString(36).substring(7);
@@ -23,18 +25,7 @@ var urlDatabase = {
   "9sm5xK": { longURL: "http://www.google.com", userID: "aJ48lW" }
 };
 
-const users = {
-  "aJ48lW": {
-    id: "aJ48lW",
-    email: "tykhomyrovaanna@gmail.com",
-    password: "123"
-  },
- "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: "123"
-  }
-};
+const users = {};
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -142,14 +133,16 @@ res.render("registration_form", templateVars);
 function emailAlreadyInUse(email) {
   let exists = false;
   for(let user in users) {
-    if(users[user].email === email) exists = users[user];
+    if(users[user].email === email) {
+      exists = users[user];
+    }
   }
   return exists;
 }
 
 app.post("/register", (req, res) => {
   const email = req.body.email;
-  const password = req.body.password;
+  const password = bcrypt.hashSync(req.body.password, 10);
   if (email === "" || password == "") {
    res.status(400).send('Fields cannot be empty!');
   } else if (emailAlreadyInUse(email)) {
@@ -163,6 +156,7 @@ app.post("/register", (req, res) => {
     password: password
   };
   res.cookie("user_id", id);
+  console.log(users);
   res.redirect("/urls");
 });
 
@@ -173,7 +167,7 @@ app.post("/login", (req, res) => {
   if (!user) {
     res.status(403).send('Email cannot be found!');
   } else {
-      if (user.password === password) {
+      if (bcrypt.compareSync(password, user.password)) {
         res.cookie('user_id', user.id);
         res.redirect('/urls');
       } else {
