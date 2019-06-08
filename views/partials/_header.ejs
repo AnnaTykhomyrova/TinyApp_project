@@ -10,16 +10,15 @@
 </head>
 <body style="font-size:20px; padding:50px;">
   <h1>TinyApp</h1>
-
   <%if (user) { %>
     <a href='/urls'>URLs</a>&nbsp;&#124;
     &nbsp;<a href='/urls/new'>Create New TinyURL</a>
     <p>Logged In As:&nbsp;&nbsp;<%= user.email %></p>
     <form class="form-inline" action="/logout" method="POST">
       <div class="form-group mb-2">
-    <button type="submit" class="btn btn-primary">Logout</button>
-  </div>
-  </form>
+      <button type="submit" class="btn btn-primary">Logout</button>
+      </div>
+    </form>
   <% } else { %>
   <div>
     <a href='/login'>Login</a>&nbsp;&#124;
