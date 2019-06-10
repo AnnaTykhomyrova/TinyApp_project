@@ -18,10 +18,32 @@ app.use(cookieSession({
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs"); // Set ejs as the view engine
 
-
+// helper functions
 function generateRandomString() {
   let r = Math.random().toString(36).substring(7);
    return r;
+}
+
+// helping function for checking if URLs belong to current user
+function urlsForUser(id) {
+  var userURL = {};
+    for (let shortId in urlDatabase) {
+      if (urlDatabase[shortId].userID === id) {
+        userURL[shortId] = urlDatabase[shortId];
+      }
+    }
+  return userURL;
+}
+
+// helping function for checking if user email exist
+function emailAlreadyInUse(email) {
+  let exists = false;
+  for(let user in users) {
+    if(users[user].email === email) {
+      exists = users[user];
+    }
+  }
+  return exists;
 }
 
 // Database sets
@@ -117,7 +139,6 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-
 // POST functions
 // clear cookie after logout
 app.post("/logout", (req, res) => {
@@ -134,36 +155,14 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);
 });
 
-// helping function for checking if URLs belong to current user
-function urlsForUser(id) {
-  var userURL = {};
-    for (let shortId in urlDatabase) {
-      if (urlDatabase[shortId].userID === id) {
-        userURL[shortId] = urlDatabase[shortId];
-      }
-    }
-  return userURL;
-}
-
-// helping function for checking if user email exist
-function emailAlreadyInUse(email) {
-  let exists = false;
-  for(let user in users) {
-    if(users[user].email === email) {
-      exists = users[user];
-    }
-  }
-  return exists;
-}
-
 // checking email and password when user regist
 app.post("/register", (req, res) => {
   const email = req.body.email;
   const password = bcrypt.hashSync(req.body.password, 10);
-  if (email === "" || password == "") {
-   res.status(400).send('Fields cannot be empty!');
+  if (req.body.password === '' || email === '') {
+   return res.status(400).send('Fields cannot be empty!');
   } else if (emailAlreadyInUse(email)) {
-    res.status(400).send('Email has already exist!');
+    return res.status(400).send('Email has already exist!');
   }
   const id = generateRandomString();
   users[id] = {
@@ -203,12 +202,6 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.post("/urls/:id", (req, res) => {
   urlDatabase[req.params.id].longURL  = req.body.longURL;
   res.redirect("/urls");
-});
-
-app.get("/u/:shortURL", (req, res) => {
-  const shortURL = req.params.shortURL;
-  const longURL = urlDatabase[shortURL].longURL;
-  res.redirect(longURL);
 });
 
 //server start
